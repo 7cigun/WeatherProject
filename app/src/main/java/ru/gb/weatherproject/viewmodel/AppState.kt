@@ -1,8 +1,10 @@
 package ru.gb.weatherproject.viewmodel
 
+import ru.gb.weatherproject.repository.Weather
+
 sealed class AppState {
     object Loading : AppState()
-    data class Success(val weatherData: Any) : AppState() {
+    data class Success(val weatherData: Weather) : AppState() {
         fun test() {}
     }
 
