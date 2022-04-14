@@ -16,6 +16,10 @@ class MainFragment : Fragment() {
 
     lateinit var binding:FragmentMainBinding
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
