@@ -9,4 +9,7 @@
     <string name="error">Error</string>
     <string name="reload">Reload</string>
 
+    <string name="success_get">Успешное получение данных</string>
+    <string name="unsuccess_get">Не удалось получить данные</string>
+
 </resources>

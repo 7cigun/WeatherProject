@@ -16,25 +16,29 @@ import ru.gb.weatherproject.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
-    lateinit var binding:FragmentMainBinding
+    private var _binding: FragmentMainBinding? = null
+    private val binding: FragmentMainBinding
+        get() {
+            return _binding!!
+        }
 
     override fun onDestroy() {
         super.onDestroy()
+        _binding = null
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
-        //return inflater.inflate(R.layout.fragment_main, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = object:Observer<AppState>{
+        val observer = object : Observer<AppState> {
             override fun onChanged(data: AppState) {
                 renderData(data)
             }
@@ -44,11 +48,12 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
-    private fun renderData(data:AppState){
-        when (data){
+    private fun renderData(data: AppState) {
+        when (data) {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainView, "Не удалось ${data.error}", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.mainView, "${resources.getText(R.string.unsuccess_get)} ${data.error}", Snackbar.LENGTH_LONG)
+                    .show()
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
@@ -58,8 +63,9 @@ class MainFragment : Fragment() {
                 binding.cityName.text = data.weatherData.city.name
                 binding.temperatureValue.text = data.weatherData.temperature.toString()
                 binding.feelsLikeValue.text = data.weatherData.feelslike.toString()
-                binding.cityCoordinates.text = "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
-                Snackbar.make(binding.mainView, "Успех!", Snackbar.LENGTH_LONG).show()
+                binding.cityCoordinates.text =
+                    "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
+                Snackbar.make(binding.mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
             }
         }
 
