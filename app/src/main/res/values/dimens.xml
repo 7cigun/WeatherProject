@@ -5,5 +5,10 @@
     <dimen name="margin_15_dp">15dp</dimen>
     <dimen name="temperature_value_text_size">40sp</dimen>
     <dimen name="feels_like_text_size">30sp</dimen>
+    <dimen name="cityTextSize">25sp</dimen>
+    <dimen name="cityMargin">10dp</dimen>
+    <dimen name="delimiterSize">1px</dimen>
+    <dimen name="iconSize">56dp</dimen>
+    <dimen name="iconMargin">20dp</dimen>
 
 </resources>
