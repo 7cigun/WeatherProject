@@ -13,8 +13,10 @@ import ru.gb.weatherproject.view.MainActivity
 import ru.gb.weatherproject.view.details.DetailsFragment
 import ru.gb.weatherproject.viewmodel.MainViewModel
 
-class WeatherListAdapter(private val onItemClickListener: OnItemListClickListener,
-                         private var data: List<Weather> = listOf()) :
+class WeatherListAdapter(
+    private val onItemClickListener: OnItemListClickListener,
+    private var data: List<Weather> = listOf()
+) :
     RecyclerView.Adapter<WeatherListAdapter.CityHolder>() {
 
     fun setData(data: List<Weather>) {
@@ -32,17 +34,19 @@ class WeatherListAdapter(private val onItemClickListener: OnItemListClickListene
     }
 
     override fun onBindViewHolder(holder: CityHolder, position: Int) {
-        holder.bind(data.get(position))
+        holder.bind(data[position])
     }
 
     override fun getItemCount() = data.size
 
     inner class CityHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(weather: Weather) {
-            val binding = FragmentWeatherListRecyclerItemBinding.bind(itemView)
-            binding.tvCityName.text = weather.city.name
-            binding.root.setOnClickListener {
-                onItemClickListener.onItemClick(weather)
+            FragmentWeatherListRecyclerItemBinding.bind(itemView).apply {
+                tvCityName.text = weather.city.name
+                root.setOnClickListener {
+                    onItemClickListener.onItemClick(weather)
+                }
+
             }
         }
     }

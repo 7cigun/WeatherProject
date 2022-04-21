@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_datails.*
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.databinding.FragmentDatailsBinding
 import ru.gb.weatherproject.repository.Weather
@@ -27,27 +28,30 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDatailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather:Weather = requireArguments().getParcelable<Weather>(KEY_BUNDLE_WEATHER)!!
-        renderData(weather)
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let{
+            renderData(it)
+        }
     }
 
     private fun renderData(weather: Weather) {
-        binding.loadingLayout.visibility = View.GONE
-        binding.cityName.text = weather.city.name
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelslike.toString()
-        binding.cityCoordinates.text =
-            "${weather.city.lat} ${weather.city.lon}"
-        Snackbar.make(binding.mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
+        with(binding) {
+            loadingLayout.visibility = View.GONE
+            cityName.text = weather.city.name
+            temperatureValue.text = weather.temperature.toString()
+            feelsLikeValue.text = weather.feelslike.toString()
+            cityCoordinates.text =
+                "${weather.city.lat} ${weather.city.lon}"
+        }
+            Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
+        }
 
-    }
 
     companion object {
 

@@ -36,7 +36,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWeatherListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,13 +45,9 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recycleView.adapter = adapter
+        initRecycler()
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = object : Observer<AppState> {
-            override fun onChanged(data: AppState) {
-                renderData(data)
-            }
-        }
+        val observer = {data: AppState -> renderData(data)}
         viewModel.getData().observe(viewLifecycleOwner, observer)
 
         binding.floatActionButton.setOnClickListener {
@@ -77,6 +73,10 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         viewModel.getWeatherRussia()
     }
 
+    fun initRecycler(){
+        binding.recycleView.adapter = adapter
+    }
+
     private fun renderData(data: AppState) {
         when (data) {
             is AppState.Error -> {
@@ -94,14 +94,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
                 adapter.setData(data.weatherList)
-
-                /*binding.cityName.text = data.weatherData.city.name
-                binding.temperatureValue.text = data.weatherData.temperature.toString()
-                binding.feelsLikeValue.text = data.weatherData.feelslike.toString()
-                binding.cityCoordinates.text =
-                    "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
-                Snackbar.make(binding.mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()*/
-            }
+             }
         }
 
     }
@@ -113,9 +106,11 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(KEY_BUNDLE_WEATHER, weather)
-        requireActivity().supportFragmentManager.beginTransaction()
-            .add(R.id.container, DetailsFragment.newInstance(bundle)).addToBackStack("").commit()
+        requireActivity().supportFragmentManager.beginTransaction().add(
+            R.id.container,
+            DetailsFragment.newInstance(Bundle().apply {
+                putParcelable(KEY_BUNDLE_WEATHER, weather)
+            })
+        ).addToBackStack("").commit()
     }
 }
