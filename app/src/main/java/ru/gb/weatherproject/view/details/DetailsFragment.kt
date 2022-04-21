@@ -49,9 +49,13 @@ class DetailsFragment : Fragment() {
             cityCoordinates.text =
                 "${weather.city.lat} ${weather.city.lon}"
         }
-            Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
+            //Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
+            mainView.showSnackbar()
         }
 
+    private fun View.showSnackbar() {
+        Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
+    }
 
     companion object {
 
@@ -63,3 +67,5 @@ class DetailsFragment : Fragment() {
         }
     }
 }
+
+
