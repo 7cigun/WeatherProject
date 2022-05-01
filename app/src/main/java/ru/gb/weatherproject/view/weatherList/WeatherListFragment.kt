@@ -9,9 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_weather_list.*
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.databinding.FragmentWeatherListBinding
 import ru.gb.weatherproject.repository.Weather
+import ru.gb.weatherproject.repository.getRussianCities
 import ru.gb.weatherproject.utils.KEY_BUNDLE_WEATHER
 import ru.gb.weatherproject.view.MainActivity
 import ru.gb.weatherproject.view.details.DetailsFragment
@@ -47,7 +49,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = {data: AppState -> renderData(data)}
+        val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
 
         binding.floatActionButton.setOnClickListener {
@@ -73,7 +75,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         viewModel.getWeatherRussia()
     }
 
-    fun initRecycler(){
+    fun initRecycler() {
         binding.recycleView.adapter = adapter
     }
 
@@ -94,7 +96,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
                 adapter.setData(data.weatherList)
-             }
+            }
         }
 
     }

@@ -35,7 +35,7 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let{
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             renderData(it)
         }
     }
@@ -49,12 +49,12 @@ class DetailsFragment : Fragment() {
             cityCoordinates.text =
                 "${weather.city.lat} ${weather.city.lon}"
         }
-            //Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
-            mainView.showSnackbar()
-        }
+        mainView.showSnackbar()
+    }
 
     private fun View.showSnackbar() {
-        Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(mainView, "${resources.getText(R.string.success_get)}", Snackbar.LENGTH_LONG)
+            .show()
     }
 
     companion object {
