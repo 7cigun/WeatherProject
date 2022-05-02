@@ -9,10 +9,13 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_datails.*
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.databinding.FragmentDatailsBinding
+import ru.gb.weatherproject.repository.OnServerResponse
 import ru.gb.weatherproject.repository.Weather
+import ru.gb.weatherproject.repository.WeatherDTO
+import ru.gb.weatherproject.repository.WeatherLoader
 import ru.gb.weatherproject.utils.KEY_BUNDLE_WEATHER
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), OnServerResponse {
 
     private var _binding: FragmentDatailsBinding? = null
     private val binding: FragmentDatailsBinding
@@ -33,21 +36,24 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
+    lateinit var currentCityName: String
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
-            renderData(it)
+            currentCityName = it.city.name
+            WeatherLoader(this@DetailsFragment).loadWeather(it.city.lat, it.city.lon)
         }
     }
 
-    private fun renderData(weather: Weather) {
+    private fun renderData(weather: WeatherDTO) {
         with(binding) {
             loadingLayout.visibility = View.GONE
-            cityName.text = weather.city.name
-            temperatureValue.text = weather.temperature.toString()
-            feelsLikeValue.text = weather.feelslike.toString()
+            cityName.text = currentCityName
+            temperatureValue.text = weather.factDTO.temperature.toString()
+            feelsLikeValue.text = weather.factDTO.feelsLike.toString()
             cityCoordinates.text =
-                "${weather.city.lat} ${weather.city.lon}"
+                "${weather.infoDTO.lat} ${weather.infoDTO.lon}"
         }
         mainView.showSnackbar()
     }
@@ -65,6 +71,10 @@ class DetailsFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun onResponse(weatherDTO: WeatherDTO) {
+        renderData(weatherDTO)
     }
 }
 
