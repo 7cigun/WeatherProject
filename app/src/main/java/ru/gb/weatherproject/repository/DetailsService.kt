@@ -15,7 +15,6 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-//class DetailsService(val name: String = "", private val onServerResponseListener: OnServerResponse, private val onErrorListener: OnServerResponseListener): IntentService(name)
 class DetailsService(val name: String = ""): IntentService(name)
 {
     override fun onHandleIntent(intent: Intent?)
@@ -26,7 +25,7 @@ class DetailsService(val name: String = ""): IntentService(name)
             val lon = it.getDoubleExtra(KEY_BUNDLE_LON, 0.0)
             Log.d("@DetServ@", "DetailsService got $lat $lon")
 
-            val urlText = "$YANDEX_DOMAIN${YANDEX_PATH}lat=$lat&lon=$lon"
+            val urlText = "$YANDEX_DOMAIN${YANDEX_ENDPOINT}lat=$lat&lon=$lon"
             //val urlText = "http://212.86.114.27/v2/informers?lat=$lat&lon=$lon"
             val uri = URL(urlText)
 
@@ -62,7 +61,6 @@ class DetailsService(val name: String = ""): IntentService(name)
                             KEY_BUNDLE_SERVICE_BROADCAST_WEATHER,
                             weatherDTO
                         )
-                        //sendBroadcast(message)
                         LocalBroadcastManager.getInstance(this).sendBroadcast(message)
                     }
                     else -> {}
@@ -71,11 +69,6 @@ class DetailsService(val name: String = ""): IntentService(name)
             } finally {
                 urlConnection.disconnect()
             }
-
-
-
-
-
         }
     }
 }

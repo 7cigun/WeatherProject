@@ -3,9 +3,7 @@ package ru.gb.weatherproject.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.gb.weatherproject.repository.Repository
 import ru.gb.weatherproject.repository.RepositoryImpl
-import java.lang.Thread.sleep
 
 class MainViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
