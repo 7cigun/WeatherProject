@@ -4,9 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
+import coil.request.ImageRequest
 import ru.gb.weatherproject.repository.Weather
 import ru.gb.weatherproject.viewmodel.DetailsState
 import ru.gb.weatherproject.viewmodel.DetailsViewModel
@@ -73,9 +78,25 @@ class DetailsFragment : Fragment() {
                     feelsLikeValue.text = weather.feelsLike.toString()
                     cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
                     mainView.showSnackbar()
+
+                    headerCityIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+                    icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${weather.icon}.svg")
                 }
             }
         }
+    }
+
+    fun ImageView.loadSvg(url:String){
+        val imageLoader = ImageLoader.Builder(this.context)
+            .componentRegistry { add(SvgDecoder(this@loadSvg.context)) }
+            .build()
+        val request = ImageRequest.Builder(this.context)
+            .crossfade(true)
+            .crossfade(500)
+            .data(url)
+            .target(this)
+            .build()
+        imageLoader.enqueue(request)
     }
 
     private fun View.showSnackbar() {

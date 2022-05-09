@@ -24,11 +24,16 @@ class DetailsRepositoryRetrofit2Impl:DetailsRepository {
             override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
                 if(response.isSuccessful){
                     response.body()?.let {
-                        callbackMy.onResponse(convertDtoToModel(it))
+                        val weather = convertDtoToModel(it)
+                        weather.city = city
+                        callbackMy.onResponse(weather)
                     }
+                }else{
+                    callbackMy.onFail()
                 }
             }
             override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
+                callbackMy.onFail()
             }
         })
     }
