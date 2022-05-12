@@ -1,11 +1,14 @@
 package ru.gb.weatherproject.view
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
+import ru.gb.weatherproject.utils.KEY_SP_FILE_LOCATION
+import ru.gb.weatherproject.utils.KEY_SP_IS_RUSSIAN
 import ru.gb.weatherproject.view.weatherList.HistoryWeatherListFragment
 import ru.gb.weatherproject.view.weatherList.WeatherListFragment
 
@@ -17,6 +20,15 @@ class MainActivity : AppCompatActivity() {
         if(savedInstanceState == null){
             supportFragmentManager.beginTransaction().replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
+
+        /*val sp = getSharedPreferences(KEY_SP_FILE_LOCATION, Context.MODE_PRIVATE)
+
+        val editor =  sp.edit()
+        editor.putBoolean(KEY_SP_IS_RUSSIAN,true)
+        editor.apply()
+
+        val defaultValueIsRussian = true
+        sp.getBoolean(KEY_SP_IS_RUSSIAN,defaultValueIsRussian)*/ //TODO нужно разобраться, куда поместить ?? WeatherListFragment
 
         MyApp.getHistoryDao().getAll()
     }
