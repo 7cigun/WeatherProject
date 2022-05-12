@@ -2,6 +2,6 @@ package ru.gb.weatherproject.repository
 
 import ru.gb.weatherproject.viewmodel.DetailsViewModel
 
-interface DetailsRepository {
+interface DetailsRepositoryOne {
     fun getWeatherDetails(city:City,callback: DetailsViewModel.Callback)
 }

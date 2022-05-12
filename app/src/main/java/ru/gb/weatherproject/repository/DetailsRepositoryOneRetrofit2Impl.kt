@@ -12,7 +12,7 @@ import ru.gb.weatherproject.utils.YANDEX_DOMAIN
 import ru.gb.weatherproject.utils.convertDtoToModel
 import ru.gb.weatherproject.viewmodel.DetailsViewModel
 
-class DetailsRepositoryRetrofit2Impl:DetailsRepository {
+class DetailsRepositoryOneRetrofit2Impl:DetailsRepositoryOne {
     override fun getWeatherDetails(city: City, callbackMy: DetailsViewModel.Callback) {
         val weatherAPI = Retrofit.Builder().apply {
             baseUrl(YANDEX_DOMAIN)

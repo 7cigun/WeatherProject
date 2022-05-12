@@ -1,5 +1,7 @@
 package ru.gb.weatherproject.utils
 
+import ru.gb.weatherproject.domain.room.HistoryEntity
+import ru.gb.weatherproject.repository.City
 import ru.gb.weatherproject.repository.Weather
 import ru.gb.weatherproject.repository.dto.FactDTO
 import ru.gb.weatherproject.repository.dto.WeatherDTO
@@ -21,4 +23,14 @@ class Utils {
 fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {
     val fact: FactDTO = weatherDTO.factDTO
     return (Weather(getDefaultCity(), fact.temperature, fact.feelsLike, fact.icon))
+}
+
+fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>): List<Weather> {
+    return entityList.map {
+        Weather(City(it.city, 0.0, 0.0), it.temperature, it.feelsLike, it.icon)
+    }
+}
+
+fun convertWeatherToEntity(weather: Weather): HistoryEntity {
+    return HistoryEntity(0, weather.city.name, weather.temperature,weather.feelsLike, weather.icon)
 }

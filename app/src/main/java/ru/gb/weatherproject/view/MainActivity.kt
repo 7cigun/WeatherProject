@@ -2,8 +2,11 @@ package ru.gb.weatherproject.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
+import ru.gb.weatherproject.view.weatherList.HistoryWeatherListFragment
 import ru.gb.weatherproject.view.weatherList.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -16,5 +19,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         MyApp.getHistoryDao().getAll()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_history->{
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container, HistoryWeatherListFragment.newInstance()).addToBackStack("").commit()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
