@@ -2,6 +2,7 @@ package ru.gb.weatherproject.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.view.weatherList.WeatherListFragment
 
@@ -13,5 +14,7 @@ class MainActivity : AppCompatActivity() {
         if(savedInstanceState == null){
             supportFragmentManager.beginTransaction().replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
+
+        MyApp.getHistoryDao().getAll()
     }
 }
