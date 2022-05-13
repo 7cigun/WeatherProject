@@ -58,9 +58,9 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         initRecycler()
         val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
-        setupFub()
-        loadLocation()
+        isRussian = loadLocation()
         viewModel.getWeather(isRussian)
+        setupFub()
     }
 
     fun setupFub() {
@@ -68,14 +68,13 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
             isRussian = !isRussian
 
             if (isRussian) {
-                viewModel.getWeatherRussia()
                 binding.floatActionButton.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.ic_russia
                     )
                 )
-                saveLocation(isRussian)
+                viewModel.getWeatherRussia()
             } else {
                 binding.floatActionButton.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -84,8 +83,8 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
                     )
                 )
                 viewModel.getWeatherWorld()
-                saveLocation(isRussian)
             }
+            saveLocation(isRussian)
         }
     }
 
@@ -93,7 +92,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         val sharedPref =
             requireContext().getSharedPreferences(KEY_SP_FILE_LOCATION, Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.putBoolean(KEY_SP_IS_RUSSIAN, true)
+        editor.putBoolean(KEY_SP_IS_RUSSIAN, isRussian)
         editor.apply()
     }
 
