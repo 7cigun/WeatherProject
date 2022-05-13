@@ -1,18 +1,15 @@
 package ru.gb.weatherproject.view.weatherList
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_weather_list.*
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.databinding.FragmentWeatherListBinding
 import ru.gb.weatherproject.repository.Weather
@@ -20,7 +17,6 @@ import ru.gb.weatherproject.repository.getRussianCities
 import ru.gb.weatherproject.utils.KEY_BUNDLE_WEATHER
 import ru.gb.weatherproject.utils.KEY_SP_FILE_LOCATION
 import ru.gb.weatherproject.utils.KEY_SP_IS_RUSSIAN
-import ru.gb.weatherproject.view.MainActivity
 import ru.gb.weatherproject.view.details.DetailsFragment
 import ru.gb.weatherproject.viewmodel.AppState
 import ru.gb.weatherproject.viewmodel.MainViewModel
@@ -48,7 +44,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         return binding.root
     }
 
-    private var isRussian = true //private
+    private var isRussian = true
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -59,33 +55,37 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
         isRussian = loadLocation()
-        viewModel.getWeather(isRussian)
         setupFub()
+        viewModel.getWeather(isRussian)
+        clickListener()
+    }
+
+    fun clickListener() {
+        binding.floatActionButton.setOnClickListener {
+            isRussian = !isRussian
+            setupFub()
+        }
     }
 
     fun setupFub() {
-        binding.floatActionButton.setOnClickListener {
-            isRussian = !isRussian
-
-            if (isRussian) {
-                binding.floatActionButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_russia
-                    )
+        if (isRussian) {
+            binding.floatActionButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_russia
                 )
-                viewModel.getWeatherRussia()
-            } else {
-                binding.floatActionButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_earth
-                    )
+            )
+            viewModel.getWeatherRussia()
+        } else {
+            binding.floatActionButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_earth
                 )
-                viewModel.getWeatherWorld()
-            }
-            saveLocation(isRussian)
+            )
+            viewModel.getWeatherWorld()
         }
+        saveLocation(isRussian)
     }
 
     fun saveLocation(isRussian: Boolean) {
@@ -97,7 +97,8 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
     fun loadLocation(): Boolean {
-        val sharedPref = requireContext().getSharedPreferences(KEY_SP_FILE_LOCATION, Context.MODE_PRIVATE)
+        val sharedPref =
+            requireContext().getSharedPreferences(KEY_SP_FILE_LOCATION, Context.MODE_PRIVATE)
         return sharedPref.getBoolean(KEY_SP_IS_RUSSIAN, true)
     }
 
