@@ -17,23 +17,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if(savedInstanceState == null){
-            supportFragmentManager.beginTransaction().replace(R.id.container, WeatherListFragment.newInstance()).commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
 
         MyApp.getHistoryDao().getAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu,menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_history->{
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.container, HistoryWeatherListFragment.newInstance()).addToBackStack("").commit()
+        when (item.itemId) {
+            R.id.action_history -> {
+                val historyFragment = supportFragmentManager.findFragmentByTag("fragment_tag")
+                if (historyFragment == null) {
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .replace(R.id.container, HistoryWeatherListFragment.newInstance(), "fragment_tag")
+                            .addToBackStack("")
+                            .commit()
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
