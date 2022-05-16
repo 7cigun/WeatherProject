@@ -11,5 +11,10 @@
 
     <string name="success_get">Успешное получение данных</string>
     <string name="unsuccess_get">Не удалось получить данные</string>
+    <string name="work_with_content_provider">WWCP</string>
+    <string name="contacts_head">Доступ к контактам</string>
+    <string name="explain_contacts">Уважаем вашу конфеденциальность, но работать не будет!</string>
+    <string name="grant_access">Предоставить доступ</string>
+    <string name="dont_allow">Не надо</string>
 
 </resources>

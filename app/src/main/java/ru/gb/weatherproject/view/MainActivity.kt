@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
+import ru.gb.weatherproject.lesson9.WorkWithContentProviderFragment
 import ru.gb.weatherproject.utils.KEY_SP_FILE_LOCATION
 import ru.gb.weatherproject.utils.KEY_SP_IS_RUSSIAN
 import ru.gb.weatherproject.view.weatherList.HistoryWeatherListFragment
@@ -33,11 +34,22 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_history -> {
-                val historyFragment = supportFragmentManager.findFragmentByTag("fragment_tag")
+                val historyFragment = supportFragmentManager.findFragmentByTag("history_fragment_tag")
                 if (historyFragment == null) {
                     supportFragmentManager.apply {
                         beginTransaction()
-                            .replace(R.id.container, HistoryWeatherListFragment.newInstance(), "fragment_tag")
+                            .replace(R.id.container, HistoryWeatherListFragment.newInstance(), "history_fragment_tag")
+                            .addToBackStack("")
+                            .commit()
+                    }
+                }
+            }
+            R.id.action_work_with_content_provider -> {
+                val contactsFragment = supportFragmentManager.findFragmentByTag("contacts_fragment_tag")
+                if (contactsFragment == null) {
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .replace(R.id.container, WorkWithContentProviderFragment.newInstance(), "contacts_fragment_tag")
                             .addToBackStack("")
                             .commit()
                     }
