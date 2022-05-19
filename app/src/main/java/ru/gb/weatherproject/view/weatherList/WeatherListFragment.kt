@@ -1,11 +1,14 @@
 package ru.gb.weatherproject.view.weatherList
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.databinding.FragmentWeatherListBinding
 import ru.gb.weatherproject.repository.Weather
-import ru.gb.weatherproject.repository.getRussianCities
 import ru.gb.weatherproject.utils.KEY_BUNDLE_WEATHER
 import ru.gb.weatherproject.utils.KEY_SP_FILE_LOCATION
 import ru.gb.weatherproject.utils.KEY_SP_IS_RUSSIAN
@@ -55,19 +57,79 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
         isRussian = loadLocation()
-        setupFub()
+        setupFubCities()
         viewModel.getWeather(isRussian)
+        setupFubLocation()
         clickListener()
     }
 
     fun clickListener() {
         binding.floatActionButton.setOnClickListener {
             isRussian = !isRussian
-            setupFub()
+            setupFubCities()
         }
     }
 
-    fun setupFub() {
+    fun setupFubLocation(){
+        binding.mainFragmentFABLocation.setOnClickListener(){
+            checkPermission()
+        }
+    }
+
+    private fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            getLocation()
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            explain()
+        } else {
+            mRequestPermission()
+        }
+    }
+
+    private val REQUEST_CODE = 998
+    private fun mRequestPermission() {
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE) {
+            for (i in permissions.indices) {
+                if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    getLocation()
+                } else {
+                    explain()
+                }
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
+    private fun getLocation (){
+
+    }
+
+    private fun explain() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(resources.getString(R.string.dialog_rationale_title))
+            .setMessage(resources.getString(R.string.dialog_rationale_message))
+            .setPositiveButton(resources.getString(R.string.dialog_rationale_give_access)) { _, _ ->
+                //mRequestPermission()
+            }
+            .setNegativeButton(getString(R.string.dialog_rationale_decline)) { dialog, _ -> dialog.dismiss() }
+            .create()
+            .show()
+    }
+
+    fun setupFubCities() {
         if (isRussian) {
             binding.floatActionButton.setImageDrawable(
                 ContextCompat.getDrawable(
