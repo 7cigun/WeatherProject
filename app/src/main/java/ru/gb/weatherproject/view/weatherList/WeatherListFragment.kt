@@ -132,6 +132,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         }
     }
 
+
     fun getAddressByLocation(location: Location){
         val geocoder = Geocoder(requireContext())
         val timeStump = System.currentTimeMillis()
