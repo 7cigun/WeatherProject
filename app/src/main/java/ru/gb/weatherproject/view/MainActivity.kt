@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
+import ru.gb.weatherproject.lesson10.MapsFragment
 import ru.gb.weatherproject.lesson9.WorkWithContentProviderFragment
 import ru.gb.weatherproject.utils.KEY_SP_FILE_LOCATION
 import ru.gb.weatherproject.utils.KEY_SP_IS_RUSSIAN
@@ -50,6 +51,17 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.apply {
                         beginTransaction()
                             .replace(R.id.container, WorkWithContentProviderFragment.newInstance(), "contacts_fragment_tag")
+                            .addToBackStack("")
+                            .commit()
+                    }
+                }
+            }
+            R.id.action_menu_google_maps -> {
+                val mapsFragment = supportFragmentManager.findFragmentByTag("maps_fragment_tag")
+                if (mapsFragment == null) {
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .replace(R.id.container, MapsFragment(), "maps_fragment_tag")
                             .addToBackStack("")
                             .commit()
                     }

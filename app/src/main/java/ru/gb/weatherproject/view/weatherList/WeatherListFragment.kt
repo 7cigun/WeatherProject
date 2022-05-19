@@ -77,8 +77,8 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         }
     }
 
-    fun setupFubLocation(){
-        binding.mainFragmentFABLocation.setOnClickListener(){
+    fun setupFubLocation() {
+        binding.mainFragmentFABLocation.setOnClickListener() {
             checkPermission()
         }
     }
@@ -133,37 +133,45 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
 
-    fun getAddressByLocation(location: Location){
+    fun getAddressByLocation(location: Location) {
         val geocoder = Geocoder(requireContext())
         val timeStump = System.currentTimeMillis()
-        Thread{
-            val addressText = geocoder.getFromLocation(location.latitude,location.longitude,1000000)[0].getAddressLine(0)
+        Thread {
+            val addressText = geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1000000
+            )[0].getAddressLine(0)
             requireActivity().runOnUiThread {
-                showAddressDialog(addressText,location)
+                showAddressDialog(addressText, location)
             }
         }.start()
     }
 
-    private val locationListenerTime = object : LocationListener{
+    private val locationListenerTime = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             getAddressByLocation(location)
         }
+
         override fun onProviderDisabled(provider: String) {
             super.onProviderDisabled(provider)
         }
+
         override fun onProviderEnabled(provider: String) {
             super.onProviderEnabled(provider)
         }
 
     }
 
-    private val locationListenerDistance = object : LocationListener{
+    private val locationListenerDistance = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             getAddressByLocation(location)
         }
+
         override fun onProviderDisabled(provider: String) {
             super.onProviderDisabled(provider)
         }
+
         override fun onProviderEnabled(provider: String) {
             super.onProviderEnabled(provider)
         }
@@ -171,12 +179,12 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation (){
-        context?.let{
+    private fun getLocation() {
+        context?.let {
             val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
-                providerGPS?.let{
+                providerGPS?.let {
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         10000L,
