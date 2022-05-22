@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.databinding.FragmentMapsMainBinding
 import java.util.*
@@ -112,22 +113,30 @@ class MapsFragment : Fragment() {
             val searchText = binding.searchAddress.text.toString()
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
             val results = geocoder.getFromLocationName(searchText, 1)
-            val location = LatLng(
-                results[0].latitude,
-                results[0].longitude
-            )
-
-            map.addMarker(
-                MarkerOptions()
-                    .position(location)
-                    .title(searchText)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
-            )
-            map.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    location, 10f
+            if (results.size > 0) {
+                val location = LatLng(
+                    results[0].latitude,
+                    results[0].longitude
                 )
-            )
+                map.addMarker(
+                    MarkerOptions()
+                        .position(location)
+                        .title(searchText)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
+                )
+                map.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        location, 10f
+                    )
+                )
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    "Не удалось найти ${searchText}",
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
+            }
         }
     }
 }
