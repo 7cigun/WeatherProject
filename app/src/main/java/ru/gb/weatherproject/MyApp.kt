@@ -18,7 +18,6 @@ class MyApp: Application() {
             if(db==null){
                 if(appContext!=null){
                     db = Room.databaseBuilder(appContext!!,MyDB::class.java,"test")
-                        .allowMainThreadQueries() // TODO пока не придумал, как передать данные из другого потока
                         .build()
                 }else{
                     throw IllegalStateException("что-то пошло не так, и у нас пустое appContext")

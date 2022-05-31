@@ -76,7 +76,10 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
 
-        MyApp.getHistoryDao().getAll()
+        Thread{
+            MyApp.getHistoryDao().getAll()
+        }.start()
+
 
         push()
     }

@@ -25,7 +25,10 @@ class DetailsViewModel(
             override fun onResponse(weather: Weather) {
                 liveData.postValue(DetailsState.Success(weather))
                 if (isInternet()) {
-                    repositoryAdd.addWeather(weather)
+                    Thread{
+                        repositoryAdd.addWeather(weather)
+                    }.start()
+
                 }
             }
             override fun onFail() {
