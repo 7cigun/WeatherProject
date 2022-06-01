@@ -15,6 +15,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.lesson10.MapsFragment
+import ru.gb.weatherproject.lesson11.FCMService
 import ru.gb.weatherproject.lesson9.WorkWithContentProviderFragment
 import ru.gb.weatherproject.utils.KEY_SP_FILE_LOCATION
 import ru.gb.weatherproject.utils.KEY_SP_IS_RUSSIAN
@@ -22,53 +23,6 @@ import ru.gb.weatherproject.view.weatherList.HistoryWeatherListFragment
 import ru.gb.weatherproject.view.weatherList.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        private const val NOTIFICATION_ID_LOW = 1
-        private const val NOTIFICATION_ID_HIGH = 2
-        private const val CHANNEL_ID_LOW = "channel_id_1"
-        private const val CHANNEL_ID_HIGH = "channel_id_2"
-    }
-
-    private fun push(){
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        val notificationBuilderLow = NotificationCompat.Builder(this, CHANNEL_ID_LOW).apply {
-            setSmallIcon(R.drawable.ic_map_pin)
-            setContentTitle(getString((R.string.first_channel_title)))
-            setContentText(getString((R.string.first_channel_text)))
-            priority = NotificationManager.IMPORTANCE_LOW
-        }
-
-        val notificationBuilderHigh = NotificationCompat.Builder(this, CHANNEL_ID_HIGH).apply {
-            setSmallIcon(R.drawable.ic_map_marker)
-            setContentTitle(getString((R.string.second_channel_title)))
-            setContentText(getString((R.string.second_channel_text)))
-            priority = NotificationManager.IMPORTANCE_HIGH
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val channelNameLow = "Name $CHANNEL_ID_LOW"
-            val channelDescriptionLow = "Description $CHANNEL_ID_LOW"
-            val channelPriorityLow = NotificationManager.IMPORTANCE_LOW
-            val channelLow = NotificationChannel(CHANNEL_ID_LOW, channelNameLow, channelPriorityLow).apply {
-                description = channelDescriptionLow
-            }
-            notificationManager.createNotificationChannel(channelLow)
-        }
-        notificationManager.notify(NOTIFICATION_ID_LOW,notificationBuilderLow.build())
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val channelNameHigh = "Name $CHANNEL_ID_HIGH"
-            val channelDescriptionHigh = "Description $CHANNEL_ID_HIGH"
-            val channelPriorityHigh = NotificationManager.IMPORTANCE_HIGH
-            val channelHigh = NotificationChannel(CHANNEL_ID_HIGH, channelNameHigh, channelPriorityHigh).apply {
-                description = channelDescriptionHigh
-            }
-            notificationManager.createNotificationChannel(channelHigh)
-        }
-        notificationManager.notify(NOTIFICATION_ID_HIGH,notificationBuilderHigh.build())
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,9 +45,6 @@ class MainActivity : AppCompatActivity() {
         Thread{
             MyApp.getHistoryDao().getAll()
         }.start()
-
-
-        push()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

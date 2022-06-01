@@ -32,8 +32,6 @@
     <string name="button_search_map">Поиск</string>
 
     <string name="first_channel_title">Первый канал</string>
-    <string name="second_channel_title">Второй канал</string>
     <string name="first_channel_text">Уведомление первого канала</string>
-    <string name="second_channel_text">Уведомление второго канала</string>
 
 </resources>
