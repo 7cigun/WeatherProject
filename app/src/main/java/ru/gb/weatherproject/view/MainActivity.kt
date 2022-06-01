@@ -6,9 +6,12 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.gb.weatherproject.MyApp
 import ru.gb.weatherproject.R
 import ru.gb.weatherproject.lesson10.MapsFragment
@@ -75,6 +78,15 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("###Token_logs###", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            val token = task.result
+            Log.d("###Token_logs###", "Наш токен: $token")
+        })
 
         Thread{
             MyApp.getHistoryDao().getAll()
