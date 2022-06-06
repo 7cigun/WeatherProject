@@ -30,6 +30,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            properties.load(rootProject.file("password.properties").newDataInputStream())
+            def password = properties.getProperty("password")
+
+            storeFile file("7cigun_key.jks")
+            storePassword = password
+            keyAlias 'k_1919'
+            keyPassword =password
+        }
+    }
+
     buildTypes {
 
         working{
@@ -37,6 +50,7 @@ android {
         }
 
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled true
