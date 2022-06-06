@@ -26,7 +26,7 @@ class FCMService : FirebaseMessagingService() {
         private const val NOTIFICATION_ID_HIGH = 1
         private const val CHANNEL_ID_HIGH = "channel_id_1"
 
-        private const val KEY_TITLE = "myTytle"
+        private const val KEY_TITLE = "myTitle"
         private const val KEY_MESSAGE = "myMessage"
     }
 

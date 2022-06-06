@@ -31,9 +31,15 @@ android {
     }
 
     buildTypes {
+
+        working{
+            initWith debug
+        }
+
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
         }
     }
     compileOptions {
@@ -42,6 +48,22 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    flavorDimensions 'distribution', 'age'
+    productFlavors {
+        free {
+            dimension 'distribution'
+        }
+        paid {
+            dimension 'distribution'
+        }
+        children {
+            dimension 'age'
+        }
+        adult {
+            dimension 'age'
+        }
     }
 }
 
